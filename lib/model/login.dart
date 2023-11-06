@@ -10,16 +10,17 @@ import 'package:grocery_app/sharedprefs/shared_prefs.dart';
 class LoginController with ChangeNotifier {
   final dio = Dio();
   bool isDataLoading = false;
-  bool isLoggin = false;
+  bool isGettingOutlets = false;
   bool isRegistering = false;
   int selectedIndex = 0;
   List<OutletsModel> outlets = [];
 
-  Future login(String phone, String password,context) async {
+  Future login(String phone, String password, context) async {
     debugPrint("hit login");
     debugPrint(Constants.baseUrl + '/login');
     try {
       isDataLoading = true;
+      notifyListeners();
       Map body = {"phone": phone, "password": password};
       Response response = await dio.post(Constants.baseUrl + '/login', data: body);
       if (response.statusCode == 200) {
@@ -31,7 +32,7 @@ class LoginController with ChangeNotifier {
         MySharedPref.setUserId(response.data['id']);
         var argument = {"name": response.data['name']};
         print(response.data['token']);
-        await getOutlet(response.data['id'], argument,context);
+        await getOutlet(response.data['id'], argument, context);
       } else {
         ///error
       }
@@ -40,6 +41,7 @@ class LoginController with ChangeNotifier {
     } finally {
       isDataLoading = false;
     }
+    notifyListeners();
   }
 
   Future getOutlet(String userId, Map args, context) async {
@@ -47,12 +49,12 @@ class LoginController with ChangeNotifier {
     debugPrint("hit ${MySharedPref.getToken()}");
     debugPrint(Constants.baseUrl + '/outlet/$userId');
     try {
-      isLoggin = true;
+      isGettingOutlets = true;
       Response response = await dio.get(Constants.baseUrl + '/outlets/$userId',
           options: Options(
               headers: {'Content-Type': 'application/json', "token": MySharedPref.getToken()}));
       if (response.statusCode == 200) {
-        isLoggin = false;
+        isGettingOutlets = false;
 
         for (int i = 0; i < response.data.length; i++) {
           outlets.add(OutletsModel(
@@ -67,9 +69,15 @@ class LoginController with ChangeNotifier {
         ///data successfully
         if (response.data.length == 1) {
           MySharedPref.setOutletId(response.data[0]['id'].toString());
-          Navigator.push(context, MaterialPageRoute(builder: (_) => HomeDashBoardScreen(),settings: RouteSettings(arguments: args)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => HomeDashBoardScreen(), settings: RouteSettings(arguments: args)));
         } else {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => SelectOutlet(),settings: RouteSettings(arguments: args)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => SelectOutlet(), settings: RouteSettings(arguments: args)));
         }
       } else {
         ///error
@@ -77,11 +85,12 @@ class LoginController with ChangeNotifier {
     } catch (e) {
       print('Error  is $e');
     } finally {
-      isLoggin = false;
+      isGettingOutlets = false;
     }
   }
 
-  Future register(String phone, String password, String fname, String lname, String email,context) async {
+  Future register(
+      String phone, String password, String fname, String lname, String email, context) async {
     try {
       isRegistering = true;
       Map body = {

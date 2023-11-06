@@ -69,61 +69,62 @@ class _ButtonLoginAnimationState extends State<ButtonLoginAnimation> with Ticker
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<LoginController>(context);
-    return InkWell(
-      onTap: () {
-        controller.login(widget.phone!, widget.password!,context);
-        setState(() {
-          _isLogin = true;
-        });
-        _positionController.forward();
-      },
-      child: Container(
-        height: 50,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: widget.background,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: !_isLogin
-            ? Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(widget.label!,
-                      style: TextStyle(
-                          color: widget.fontColor, fontSize: 20, fontWeight: FontWeight.bold)),
-                  SizedBox(width: 10),
-                  Icon(Icons.arrow_forward, color: widget.fontColor, size: 32)
-                ],
-              )
-            : Stack(
-                children: <Widget>[
-                  AnimatedBuilder(
-                    animation: _positionController,
-                    builder: (context, child) => Positioned(
-                      left: _positionAnimation.value,
-                      top: 5,
-                      child: AnimatedBuilder(
-                        animation: _scaleController,
-                        builder: (context, build) => Transform.scale(
-                            scale: _scaleAnimation.value,
-                            child: Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                color: widget.borderColor,
-                                shape: BoxShape.circle,
-                              ),
-                              child: !_isIconHide
-                                  ? Icon(Icons.arrow_forward, color: widget.fontColor, size: 32)
-                                  : Container(),
-                            )),
+    return Consumer<LoginController>(builder: (context, provider, child) {
+      return InkWell(
+        onTap: provider.isDataLoading == true
+            ? () {}
+            : () {
+                controller.login(widget.phone!, widget.password!, context);
+                _positionController.forward();
+              },
+        child: Container(
+          height: 50,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: widget.background,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: !provider.isDataLoading
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(widget.label!,
+                        style: TextStyle(
+                            color: widget.fontColor, fontSize: 20, fontWeight: FontWeight.bold)),
+                    SizedBox(width: 10),
+                    Icon(Icons.arrow_forward, color: widget.fontColor, size: 32)
+                  ],
+                )
+              : Stack(
+                  children: <Widget>[
+                    AnimatedBuilder(
+                      animation: _positionController,
+                      builder: (context, child) => Positioned(
+                        left: _positionAnimation.value,
+                        top: 5,
+                        child: AnimatedBuilder(
+                          animation: _scaleController,
+                          builder: (context, build) => Transform.scale(
+                              scale: _scaleAnimation.value,
+                              child: Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  color: widget.borderColor,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: !_isIconHide
+                                    ? Icon(Icons.arrow_forward, color: widget.fontColor, size: 32)
+                                    : Container(),
+                              )),
+                        ),
                       ),
-                    ),
-                  )
-                ],
-              ),
-      ),
-    );
+                    )
+                  ],
+                ),
+        ),
+      );
+    });
   }
 }

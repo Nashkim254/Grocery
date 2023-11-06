@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -16,7 +15,7 @@ class SelectOutlet extends StatelessWidget {
   const SelectOutlet({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-       final controller = Provider.of<LoginController>(context);
+    final controller = Provider.of<LoginController>(context);
     final Map args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return SafeArea(
       child: Scaffold(
@@ -42,37 +41,38 @@ class SelectOutlet extends StatelessWidget {
               SizedBox(height: 35),
               Text(
                 "Let's get started",
-                style: TextStyle(
-                      color: cardColor,
-                      fontSize: 28,
-                      fontWeight: FontWeight.w600),
+                style: TextStyle(color: cardColor, fontSize: 28, fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 12),
               Text(
                 "Select your current store ${args['outlets'].length}",
-                style: TextStyle(
-                      color: cardColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600),
+                style: TextStyle(color: cardColor, fontSize: 20, fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 90),
-              ListView.builder(
-                shrinkWrap: true,
-                itemBuilder: (context, index) => 
-                   outletCard(
-                    args['outlets'][index].name,
-                    args['outlets'][index].building,
-                    args['outlets'][index].image,
-                    () {
-                      controller.selectedIndex = index;
-                      MySharedPref.setOutletId(args['outlets'][index].id.toString());
-                    },
-                    index,
-                    context,
-                    controller,
-                  ),
-                itemCount: args['outlets'].length,
-              ),
+              Consumer<LoginController>(builder: (context, provider, child) {
+                return provider.isGettingOutlets == true
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                      )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) => outletCard(
+                          args['outlets'][index].name,
+                          args['outlets'][index].building,
+                          args['outlets'][index].image,
+                          () {
+                            controller.selectedIndex = index;
+                            MySharedPref.setOutletId(args['outlets'][index].id.toString());
+                          },
+                          index,
+                          context,
+                          controller,
+                        ),
+                        itemCount: args['outlets'].length,
+                      );
+              }),
             ],
           ),
         ),
@@ -80,7 +80,11 @@ class SelectOutlet extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
           child: CustomButton(
             text: 'Proceed',
-            onPressed: () =>  Navigator.push(context, MaterialPageRoute(builder: (_) => HomeDashBoardScreen(),settings: RouteSettings(arguments: args))),
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => HomeDashBoardScreen(),
+                    settings: RouteSettings(arguments: args))),
             borderColor: primaryColor,
           ),
         ),
@@ -114,26 +118,14 @@ Widget outletCard(String title, String subtitle, String svgPath, VoidCallback ca
         title: Text(
           title,
           style: controller.selectedIndex == index
-              ? TextStyle(
-                      color: cardColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600)
-              : TextStyle(
-                      color: greyColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600),
+              ? TextStyle(color: cardColor, fontSize: 18, fontWeight: FontWeight.w600)
+              : TextStyle(color: greyColor, fontSize: 18, fontWeight: FontWeight.w600),
         ),
         subtitle: Text(
           subtitle,
           style: controller.selectedIndex == index
-              ? TextStyle(
-                      color: cardColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600)
-              : TextStyle(
-                      color: greyColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600),
+              ? TextStyle(color: cardColor, fontSize: 18, fontWeight: FontWeight.w600)
+              : TextStyle(color: greyColor, fontSize: 18, fontWeight: FontWeight.w600),
         ),
       ),
     ),
