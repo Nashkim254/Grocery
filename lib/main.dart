@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/model/cart.dart';
 import 'package:grocery_app/model/categories.dart';
+import 'package:grocery_app/model/login.dart';
 import 'package:grocery_app/model/orders.dart';
 import 'package:grocery_app/model/products.dart';
 import 'package:grocery_app/screens/splash_screen.dart';
@@ -25,6 +26,10 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: Orders(),
+        ), 
+        
+         ChangeNotifierProvider.value(
+          value: LoginController(),
         ),
       ],
       child: MaterialApp(

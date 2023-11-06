@@ -32,6 +32,8 @@ dependencies:
   provider: ^5.0.0
   flutter_svg: ^0.22.0 # it help us to use SVG in our app
   flutter_animate:
+  dio: ^5.3.3
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

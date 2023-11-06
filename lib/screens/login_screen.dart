@@ -13,7 +13,7 @@ class LoginUI extends StatefulWidget {
 }
 
 class _LoginUIState extends State<LoginUI> {
-  TextEditingController email = TextEditingController();
+  TextEditingController phone = TextEditingController();
   TextEditingController password = TextEditingController();
 
 
@@ -22,13 +22,15 @@ class _LoginUIState extends State<LoginUI> {
       //  crossAxisAlignment: CrossAxisAlignment.start,
       //  mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        _box(email, "Phone", TextInputType.text),
+        _box(phone, "Phone", TextInputType.text),
         _box(password, "Password", TextInputType.text),
         Container(
             margin: EdgeInsets.only(
                 top: h / 20, left: 25, right: 25, bottom: 25),
             child: ButtonLoginAnimation(
               label: "Login",
+              phone: phone.text,
+              password: password.text,
               fontColor: Colors.white,
               background: shrineGreen400,
               borderColor: shrineGreen400,

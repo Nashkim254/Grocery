@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_app/model/login.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 class ButtonLoginAnimation extends StatefulWidget {
   final String? label;
+  final String? phone;
+  final String? password;
   final Color? background;
   final Color? borderColor;
   final Color? fontColor;
@@ -12,6 +16,8 @@ class ButtonLoginAnimation extends StatefulWidget {
   const ButtonLoginAnimation(
       {Key? key,
       this.label,
+      this.phone,
+      this.password,
       this.background,
       this.borderColor,
       this.fontColor,
@@ -23,8 +29,7 @@ class ButtonLoginAnimation extends StatefulWidget {
   _ButtonLoginAnimationState createState() => _ButtonLoginAnimationState();
 }
 
-class _ButtonLoginAnimationState extends State<ButtonLoginAnimation>
-    with TickerProviderStateMixin {
+class _ButtonLoginAnimationState extends State<ButtonLoginAnimation> with TickerProviderStateMixin {
   late AnimationController _positionController;
   late Animation<double> _positionAnimation;
 
@@ -38,39 +43,35 @@ class _ButtonLoginAnimationState extends State<ButtonLoginAnimation>
   void initState() {
     super.initState();
 
-    _positionController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 800));
+    _positionController = AnimationController(vsync: this, duration: Duration(milliseconds: 800));
 
-    _positionAnimation =
-        Tween<double>(begin: 10.0, end: 255.0).animate(_positionController)
-          ..addStatusListener((status) {
-            if (status == AnimationStatus.completed) {
-              setState(() {
-                _isIconHide = true;
-              });
-              _scaleController.forward();
-            }
+    _positionAnimation = Tween<double>(begin: 10.0, end: 255.0).animate(_positionController)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          setState(() {
+            _isIconHide = true;
           });
+          _scaleController.forward();
+        }
+      });
 
-    _scaleController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 900));
+    _scaleController = AnimationController(vsync: this, duration: Duration(milliseconds: 900));
 
-    _scaleAnimation =
-        Tween<double>(begin: 1.0, end: 32).animate(_scaleController)
-          ..addStatusListener((status) {
-            if (status == AnimationStatus.completed) {
-              Navigator.pushReplacement(
-                  context,
-                  PageTransition(
-                      type: PageTransitionType.fade, child: widget.child!));
-            }
-          });
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 32).animate(_scaleController)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          Navigator.pushReplacement(
+              context, PageTransition(type: PageTransitionType.fade, child: widget.child!));
+        }
+      });
   }
 
   @override
   Widget build(BuildContext context) {
+    final controller = Provider.of<LoginController>(context);
     return InkWell(
       onTap: () {
+        controller.login(widget.phone!, widget.password!,context);
         setState(() {
           _isLogin = true;
         });
@@ -90,9 +91,7 @@ class _ButtonLoginAnimationState extends State<ButtonLoginAnimation>
                 children: <Widget>[
                   Text(widget.label!,
                       style: TextStyle(
-                          color: widget.fontColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold)),
+                          color: widget.fontColor, fontSize: 20, fontWeight: FontWeight.bold)),
                   SizedBox(width: 10),
                   Icon(Icons.arrow_forward, color: widget.fontColor, size: 32)
                 ],
@@ -116,8 +115,7 @@ class _ButtonLoginAnimationState extends State<ButtonLoginAnimation>
                                 shape: BoxShape.circle,
                               ),
                               child: !_isIconHide
-                                  ? Icon(Icons.arrow_forward,
-                                      color: widget.fontColor, size: 32)
+                                  ? Icon(Icons.arrow_forward, color: widget.fontColor, size: 32)
                                   : Container(),
                             )),
                       ),
