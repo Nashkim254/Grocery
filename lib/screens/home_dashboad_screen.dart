@@ -6,6 +6,7 @@ import 'package:grocery_app/screens/explore_screen.dart';
 import 'package:grocery_app/screens/fav_screen.dart';
 import 'package:grocery_app/screens/login_screen.dart';
 import 'package:grocery_app/screens/shop_screen.dart';
+import 'package:grocery_app/sharedprefs/shared_prefs.dart';
 import 'package:grocery_app/util/responsive.dart';
 import 'package:grocery_app/util/shopping_colors.dart';
 import 'package:grocery_app/widgets/nav_drawer.dart';
@@ -20,10 +21,9 @@ class _HomeDashBoardScreenState extends State<HomeDashBoardScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int _currentIndex = 0;
   List<Product> _categoryProducts = [];
-
   @override
   void initState() {
-    // TODO: implement initState
+    Provider.of<Categories>(context).getCategories(MySharedPref.getOutletId());
     super.initState();
   }
 
@@ -40,12 +40,10 @@ class _HomeDashBoardScreenState extends State<HomeDashBoardScreen> {
       case 0:
       default:
         return ShopScreen(
-          categoryClick: (String categoryId) {
-            setState(() {
-              _categoryProducts = Provider.of<Categories>(context)
-                  .getProductsById(context, categoryId);
-              _currentIndex = 1;
-            });
+          categoryClick: (String categoryId) async{
+              _categoryProducts = await 
+                  Provider.of<Categories>(context).getProducts(categoryId, MySharedPref.getOutletId());
+              _currentIndex = 1; 
           },
         );
     }
@@ -79,8 +77,7 @@ class _HomeDashBoardScreenState extends State<HomeDashBoardScreen> {
         actions: [
           GestureDetector(
             onTap: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (_) {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) {
                 return LoginUI();
               }));
             },

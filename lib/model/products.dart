@@ -123,16 +123,15 @@ class Products with ChangeNotifier {
     debugPrint("hit get category ${Constants.baseUrl + '/products/$id/10/0'}");
     try {
       isProductsLoading = true;
-      Response response = await dio.get(
-        Constants.baseUrl + '/products/$id/10/0',
-        options: Options(
-          headers: {'Content-Type': 'application/json', "token": MySharedPref.getToken()},
-        )
-      );
+      Response response = await dio.get(Constants.baseUrl + '/products/$id/10/0',
+          options: Options(
+            headers: {'Content-Type': 'application/json', "token": MySharedPref.getToken()},
+          ));
 
       if (response.statusCode == 200) {
         products.clear();
         isProductsLoading = false;
+        notifyListeners();
         debugPrint(response.data.toString());
         var data = response.data;
         for (int i = 0; i < data['Products'].length; i++) {
@@ -152,11 +151,14 @@ class Products with ChangeNotifier {
         ///error
         debugPrint("error getting category data");
         print(response.statusCode);
+        isProductsLoading = false;
+        notifyListeners();
       }
     } catch (e) {
       print('Error while getting data is $e');
     } finally {
       isProductsLoading = false;
+      notifyListeners();
     }
   }
 
@@ -187,14 +189,13 @@ class Products with ChangeNotifier {
 
   void addProduct(Product product) {
     final newProduct = Product(
-      title: product.title,
-      price: product.price,
-      imageUrl: product.imageUrl,
-      quantity: product.quantity,
-      stock: product.stock,
-      id: DateTime.now().toString(),
-      description: product.description
-    );
+        title: product.title,
+        price: product.price,
+        imageUrl: product.imageUrl,
+        quantity: product.quantity,
+        stock: product.stock,
+        id: DateTime.now().toString(),
+        description: product.description);
     products.add(newProduct);
     // products.insert(0, newProduct); // at the start of the list
     notifyListeners();

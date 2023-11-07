@@ -12,8 +12,10 @@ class Categories with ChangeNotifier {
   final dio = Dio();
   bool isCategoriesLoading = false;
   bool isProductsLoading = false;
+  bool isProductsbyIdLoading = false;
   List<Category> categories = [];
   List<Product> products = [];
+  List<Product> productsById = [];
   List<Category> _items = [
     Category(
         id: 'c1',
@@ -133,5 +135,47 @@ class Categories with ChangeNotifier {
     }
   }
 
+ /// get products by category id
+  /// get categories from dummy helper
+ Future<List<Product>> getProducts(String cid, String oid) async {
+    // categories = DummyHelper.categories;
+    // products = DummyHelper.products;
+    try {
+      isProductsbyIdLoading = true;
+      Response response = await dio.get(
+        Constants.baseUrl + '/categories/$cid/$oid',
+       options: Options(
+         headers: {'Content-Type': 'application/json', "token": MySharedPref.getToken()},
+       )
+      );
 
+      if (response.statusCode == 200) {
+        products.clear();
+        isProductsbyIdLoading = false;
+        debugPrint(response.data.toString());
+        var data = response.data['products'];
+        for (int i = 0; i < data.length; i++) {
+          productsById.add(Product(
+              id: data[i]['ID'],
+              imageUrl: data[i]['Image'],
+              title: data[i]['ProductName'],
+              quantity: data[i]['Stock'],
+              stock: data[i]['Quantity'],
+              price: double.parse(data[i]['Price'].toString()),
+              description: data[i]['Description']));
+        }
+
+        ///data successfully
+      } else {
+        ///error
+        debugPrint("error getting pro data");
+        print(response.statusCode);
+      }
+    } catch (e) {
+      print('Error while getting data is $e');
+    } finally {
+      isProductsbyIdLoading = false;
+    }
+    return productsById;
+  }
 }

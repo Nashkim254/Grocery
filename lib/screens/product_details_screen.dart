@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:grocery_app/model/product.dart';
 import 'package:grocery_app/widgets/details/buy_now.dart';
@@ -36,8 +38,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     tag: "${widget.product!.id}",
                     child: Container(
                       // height: size.height * 0.3,
-                      child: Image.asset(
-                        widget.product!.imageUrl,
+                      child: Image.memory(
+                        base64Decode(widget.product!.imageUrl),
                         fit: BoxFit.cover,
                         height: size.height * 0.4,
                         width: size.width,

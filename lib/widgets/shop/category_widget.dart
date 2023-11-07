@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:grocery_app/model/category.dart';
 class CategoryWidget extends StatelessWidget {
@@ -15,8 +17,8 @@ class CategoryWidget extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(16.0),
-            child: Image.asset(
-              category!.imageUrl,
+            child: Image.memory(
+              base64Decode(category!.imageUrl),
               fit: BoxFit.cover,
               height: double.infinity,
               width: double.infinity,
