@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:grocery_app/model/cart.dart';
 import 'package:grocery_app/screens/product_details_screen.dart';
@@ -77,13 +79,17 @@ class CartWidget extends StatelessWidget {
           vertical: 4,
         ),
         child: ListTile(
-          leading: CircleAvatar(
-            radius: 30.0,
-            backgroundImage: AssetImage(imageUrl),
-            backgroundColor: Colors.transparent,
+          leading: Container(
+            height: 40,
+            width: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.transparent,
+            ),
+            child: Image.memory(base64Decode(imageUrl)),
           ),
           title: Text(title),
-          subtitle: Text('Total: \$${(price * quantity)}'),
+          subtitle: Text('Total: Ksh ${(price * quantity)}'),
           trailing: Text('$quantity x'),
         ),
       ),

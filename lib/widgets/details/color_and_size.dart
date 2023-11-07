@@ -35,7 +35,7 @@ class ColorAndSize extends StatelessWidget {
                     children: [
                       TextSpan(text: "Price\n"),
                       TextSpan(
-                        text: product!.price.toString() + " ₹",
+                        text: "Ksh" + product!.price.toString(),
                         style: Theme.of(context)
                             .textTheme
                             .headline5!

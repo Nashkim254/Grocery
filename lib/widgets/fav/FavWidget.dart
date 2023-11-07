@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:grocery_app/model/cart.dart';
 import 'package:grocery_app/model/product.dart';
@@ -71,13 +73,17 @@ class FavWidget extends StatelessWidget {
           vertical: 4,
         ),
         child: ListTile(
-          leading: CircleAvatar(
-            radius: 30.0,
-            backgroundImage: AssetImage(product!.imageUrl),
-            backgroundColor: Colors.transparent,
+          leading: Container(
+            height: 40,
+            width: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.transparent,
+            ),
+            child: Image.memory(base64Decode(product!.imageUrl)),
           ),
           title: Text(product!.title),
-          subtitle: Text('Total: \$${(product!.price * product!.price)}'),
+          subtitle: Text('Total: Ksh${(product!.price * product!.price)}'),
           trailing: Text('${product!.price} x'),
         ),
       ),

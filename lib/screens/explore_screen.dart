@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/model/product.dart';
 import 'package:grocery_app/model/products.dart';
 import 'package:grocery_app/screens/product_details_screen.dart';
+import 'package:grocery_app/sharedprefs/shared_prefs.dart';
 import 'package:grocery_app/util/responsive.dart';
 import 'package:grocery_app/widgets/explore/product_widget.dart';
 import 'package:grocery_app/widgets/nav_drawer.dart';
 import 'package:provider/provider.dart';
+
 class ExploreScreen extends StatefulWidget {
   final List<Product>? categoryProducts;
 
@@ -17,6 +19,12 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   List<Product>? _products;
   TextEditingController editingController = TextEditingController();
+  @override
+  void initState() {
+        Provider.of<Products>(context, listen: false).getProducts(MySharedPref.getOutletId());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.categoryProducts == null || widget.categoryProducts!.isEmpty) {

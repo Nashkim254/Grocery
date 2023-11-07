@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 class Category with ChangeNotifier {
-  final String id;
+  final int id;
   final String title;
   final String imageUrl;
   final List<String>? products;

@@ -41,12 +41,12 @@ class SelectOutlet extends StatelessWidget {
               SizedBox(height: 35),
               Text(
                 "Let's get started",
-                style: TextStyle(color: cardColor, fontSize: 28, fontWeight: FontWeight.w600),
+                style: TextStyle(color: greyColor, fontSize: 28, fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 12),
               Text(
                 "Select your current store ${args['outlets'].length}",
-                style: TextStyle(color: cardColor, fontSize: 20, fontWeight: FontWeight.w600),
+                style: TextStyle(color: greyColor, fontSize: 20, fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 90),
               Consumer<LoginController>(builder: (context, provider, child) {
@@ -63,12 +63,13 @@ class SelectOutlet extends StatelessWidget {
                           args['outlets'][index].building,
                           args['outlets'][index].image,
                           () {
-                            controller.selectedIndex = index;
+                            
+                            provider.updateUi(index);
                             MySharedPref.setOutletId(args['outlets'][index].id.toString());
                           },
                           index,
                           context,
-                          controller,
+                          provider,
                         ),
                         itemCount: args['outlets'].length,
                       );
@@ -85,7 +86,8 @@ class SelectOutlet extends StatelessWidget {
                 MaterialPageRoute(
                     builder: (_) => HomeDashBoardScreen(),
                     settings: RouteSettings(arguments: args))),
-            borderColor: primaryColor,
+            borderColor: shrineGreen400,
+            backgroundColor: primaryColor,
           ),
         ),
       ),
@@ -94,7 +96,7 @@ class SelectOutlet extends StatelessWidget {
 }
 
 Widget outletCard(String title, String subtitle, String svgPath, VoidCallback callback, int index,
-    BuildContext context, controller) {
+    BuildContext context, provider) {
   return Padding(
     padding: const EdgeInsets.only(left: 25, right: 25),
     child: SizedBox(
@@ -106,7 +108,7 @@ Widget outletCard(String title, String subtitle, String svgPath, VoidCallback ca
           height: 60,
           width: 60,
           decoration: BoxDecoration(
-            color: controller.selectedIndex == index ? primaryColor : cardColor,
+            color: provider.selectedIndex == index ? primaryColor : cardColor,
             borderRadius: const BorderRadius.all(
               Radius.circular(12),
             ),
@@ -117,13 +119,13 @@ Widget outletCard(String title, String subtitle, String svgPath, VoidCallback ca
         ),
         title: Text(
           title,
-          style: controller.selectedIndex == index
+          style: provider.selectedIndex != index
               ? TextStyle(color: cardColor, fontSize: 18, fontWeight: FontWeight.w600)
               : TextStyle(color: greyColor, fontSize: 18, fontWeight: FontWeight.w600),
         ),
         subtitle: Text(
           subtitle,
-          style: controller.selectedIndex == index
+          style: provider.selectedIndex != index
               ? TextStyle(color: cardColor, fontSize: 18, fontWeight: FontWeight.w600)
               : TextStyle(color: greyColor, fontSize: 18, fontWeight: FontWeight.w600),
         ),

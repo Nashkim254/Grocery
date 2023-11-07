@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:grocery_app/model/cart.dart';
 import 'package:grocery_app/model/fav.dart';
@@ -57,8 +59,8 @@ class ProductWidget extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-          child: Image.asset(
-            product.imageUrl,
+          child: Image.memory(
+            base64Decode(product.imageUrl),
             height: double.infinity,
             width: double.infinity,
             fit: BoxFit.cover,

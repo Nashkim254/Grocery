@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/model/login.dart';
+import 'package:grocery_app/util/logs.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -16,8 +17,8 @@ class ButtonLoginAnimation extends StatefulWidget {
   const ButtonLoginAnimation(
       {Key? key,
       this.label,
-      this.phone,
-      this.password,
+      required this.phone,
+     required this.password,
       this.background,
       this.borderColor,
       this.fontColor,
@@ -36,7 +37,6 @@ class _ButtonLoginAnimationState extends State<ButtonLoginAnimation> with Ticker
   late AnimationController _scaleController;
   late Animation<double> _scaleAnimation;
 
-  bool _isLogin = false;
   bool _isIconHide = false;
 
   @override
@@ -74,8 +74,10 @@ class _ButtonLoginAnimationState extends State<ButtonLoginAnimation> with Ticker
         onTap: provider.isDataLoading == true
             ? () {}
             : () {
-                controller.login(widget.phone!, widget.password!, context);
-                _positionController.forward();
+                printSuccess(widget.phone);
+                printSuccess(widget.password);
+                // controller.login(widget.phone!, widget.password!, context);
+                // _positionController.forward();
               },
         child: Container(
           height: 50,
@@ -84,45 +86,6 @@ class _ButtonLoginAnimationState extends State<ButtonLoginAnimation> with Ticker
             color: widget.background,
             borderRadius: BorderRadius.circular(15),
           ),
-          child: !provider.isDataLoading
-              ? Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(widget.label!,
-                        style: TextStyle(
-                            color: widget.fontColor, fontSize: 20, fontWeight: FontWeight.bold)),
-                    SizedBox(width: 10),
-                    Icon(Icons.arrow_forward, color: widget.fontColor, size: 32)
-                  ],
-                )
-              : Stack(
-                  children: <Widget>[
-                    AnimatedBuilder(
-                      animation: _positionController,
-                      builder: (context, child) => Positioned(
-                        left: _positionAnimation.value,
-                        top: 5,
-                        child: AnimatedBuilder(
-                          animation: _scaleController,
-                          builder: (context, build) => Transform.scale(
-                              scale: _scaleAnimation.value,
-                              child: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  color: widget.borderColor,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: !_isIconHide
-                                    ? Icon(Icons.arrow_forward, color: widget.fontColor, size: 32)
-                                    : Container(),
-                              )),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
         ),
       );
     });

@@ -23,7 +23,7 @@ class _HomeDashBoardScreenState extends State<HomeDashBoardScreen> {
   List<Product> _categoryProducts = [];
   @override
   void initState() {
-    Provider.of<Categories>(context).getCategories(MySharedPref.getOutletId());
+    Provider.of<Categories>(context,listen: false).getCategories(MySharedPref.getOutletId());
     super.initState();
   }
 
@@ -40,11 +40,11 @@ class _HomeDashBoardScreenState extends State<HomeDashBoardScreen> {
       case 0:
       default:
         return ShopScreen(
-          categoryClick: (String categoryId) async{
-              _categoryProducts = await 
-                  Provider.of<Categories>(context).getProducts(categoryId, MySharedPref.getOutletId());
-              _currentIndex = 1; 
-          },
+          // categoryClick: (int categoryId) async{
+          //     _categoryProducts = await 
+          //         Provider.of<Categories>(context).getProducts(categoryId.toString(), MySharedPref.getOutletId());
+          //     _currentIndex = 1; 
+          // },
         );
     }
   }

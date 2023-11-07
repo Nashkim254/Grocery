@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/constants/constants.dart';
@@ -6,25 +8,36 @@ import 'package:grocery_app/screens/home_dashboad_screen.dart';
 import 'package:grocery_app/screens/login_screen.dart';
 import 'package:grocery_app/screens/select_outlet.dart';
 import 'package:grocery_app/sharedprefs/shared_prefs.dart';
+import 'package:grocery_app/util/apis.dart';
+import 'package:grocery_app/util/logs.dart';
 
 class LoginController with ChangeNotifier {
-  final dio = Dio();
   bool isDataLoading = false;
   bool isGettingOutlets = false;
   bool isRegistering = false;
   int selectedIndex = 0;
   List<OutletsModel> outlets = [];
 
+  updateUi(int index) {
+    selectedIndex = index;
+    notifyListeners();
+  }
+
   Future login(String phone, String password, context) async {
-    debugPrint("hit login");
+    Map<String, dynamic>? data;
     debugPrint(Constants.baseUrl + '/login');
     try {
       isDataLoading = true;
       notifyListeners();
-      Map body = {"phone": phone, "password": password};
-      Response response = await dio.post(Constants.baseUrl + '/login', data: body);
+      data = {"phone": phone, "password": password};
+      printInfo("jdjdsjdsjkd=======§");
+      printInfo(data);
+      Response response = await Apis.dio.post('/login', data: data);
+      debugPrint(response.statusCode.toString());
+      debugPrint(response.data.toString());
       if (response.statusCode == 200) {
         isDataLoading = false;
+        notifyListeners();
 
         ///data successfully
         MySharedPref.setToken(response.data['token']);
@@ -45,17 +58,18 @@ class LoginController with ChangeNotifier {
   }
 
   Future getOutlet(String userId, Map args, context) async {
-    debugPrint("hit $userId");
-    debugPrint("hit ${MySharedPref.getToken()}");
+    Apis.dio.options.headers["authorization"] = "Bearer ${MySharedPref.getToken()}";
+    Map<String, dynamic>? data;
     debugPrint(Constants.baseUrl + '/outlet/$userId');
     try {
       isGettingOutlets = true;
-      Response response = await dio.get(Constants.baseUrl + '/outlets/$userId',
+      notifyListeners();
+      Response response = await Apis.dio.get('/outlets/$userId',
           options: Options(
               headers: {'Content-Type': 'application/json', "token": MySharedPref.getToken()}));
       if (response.statusCode == 200) {
         isGettingOutlets = false;
-
+        notifyListeners();
         for (int i = 0; i < response.data.length; i++) {
           outlets.add(OutletsModel(
               name: response.data[i]['name'],
@@ -86,6 +100,7 @@ class LoginController with ChangeNotifier {
       print('Error  is $e');
     } finally {
       isGettingOutlets = false;
+      notifyListeners();
     }
   }
 
@@ -100,7 +115,7 @@ class LoginController with ChangeNotifier {
         "email": email,
         "phone": phone
       };
-      Response response = await dio.post(Constants.baseUrl + '/register', data: body);
+      Response response = await Apis.dio.post('/register', data: body);
       if (response.statusCode == 200) {
         isRegistering = false;
         Navigator.push(context, MaterialPageRoute(builder: (_) => LoginUI()));

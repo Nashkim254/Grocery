@@ -137,7 +137,7 @@ class Products with ChangeNotifier {
         for (int i = 0; i < data['Products'].length; i++) {
           print("looping on category $i");
           products.add(Product(
-              id: data['Products'][i]['ID'],
+              id: data['Products'][i]['ID'].toString(),
               imageUrl: data['Products'][i]['Image'],
               title: data['Products'][i]['Product_name'],
               quantity: data['Products'][i]['Stock'],
@@ -194,7 +194,7 @@ class Products with ChangeNotifier {
         imageUrl: product.imageUrl,
         quantity: product.quantity,
         stock: product.stock,
-        id: DateTime.now().toString(),
+        id: product.id,
         description: product.description);
     products.add(newProduct);
     // products.insert(0, newProduct); // at the start of the list

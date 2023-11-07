@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/model/categories.dart';
 import 'package:grocery_app/model/category.dart';
+import 'package:grocery_app/sharedprefs/shared_prefs.dart';
 import 'package:grocery_app/util/responsive.dart';
 import 'package:grocery_app/widgets/nav_drawer.dart';
 import 'package:grocery_app/widgets/shop/category_widget.dart';
 import 'package:provider/provider.dart';
 
 class ShopScreen extends StatefulWidget {
-  final Function? categoryClick;
+  // final Function? categoryClick;
 
-  const ShopScreen({Key? key, this.categoryClick}) : super(key: key);
+  const ShopScreen({Key? key}) : super(key: key);
 
   @override
   _ShopScreenState createState() => _ShopScreenState();
@@ -38,11 +39,11 @@ class _ShopScreenState extends State<ShopScreen> {
                     Category category = _categories[index];
                     return CategoryWidget(
                       category: category,
-                      onTap: (String id) {
-                        print('Product List of Category search id: ' + id);
-                        setState(() {
-                          widget.categoryClick!(id);
-                        });
+                      onTap: (int id) async{
+                        print('Product List of Category search id: ' + id.toString());
+                         await 
+                  Provider.of<Categories>(context).getProducts(id.toString(), MySharedPref.getOutletId());
+              
                       },
                     );
                   },

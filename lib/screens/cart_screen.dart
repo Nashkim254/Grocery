@@ -31,7 +31,7 @@ class _CartScreenState extends State<CartScreen> {
                 Spacer(),
                 Chip(
                   label: Text(
-                    '\$${cart.totalAmount.toStringAsFixed(2)}',
+                    'Ksh ${cart.totalAmount.toStringAsFixed(2)}',
                   ),
                   backgroundColor: shrineGreen400,
                 ),
