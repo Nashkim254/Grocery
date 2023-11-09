@@ -45,7 +45,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 10),
-         
+          Responsive.isMobile(context) ? SizedBox() : NavDrawer(),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
