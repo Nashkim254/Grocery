@@ -36,13 +36,24 @@ class _ExploreScreenState extends State<ExploreScreen> {
     } else {
       _products = widget.categoryProducts;
     }
+    final theme = Theme.of(context);
+
     return SafeArea(
         child: Scaffold(
       backgroundColor: scaffoldBackgroundColor,
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 70),
-          Responsive.isMobile(context) ? SizedBox() : NavDrawer(),
+          SizedBox(height: 10),
+         
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              "Favourites",
+              style: theme.textTheme.headline5
+                  ?.copyWith(fontWeight: FontWeight.normal, color: kTextLightColor),
+            ),
+          ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 24),
             child: CustomFormField(

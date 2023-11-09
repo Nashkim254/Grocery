@@ -68,6 +68,7 @@ class FavWidget extends StatelessWidget {
         Provider.of<Cart>(context, listen: false).removeItem(product!.id);
       },
       child: Card(
+        color: cardColor,
         margin: EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 4,
@@ -82,9 +83,9 @@ class FavWidget extends StatelessWidget {
             ),
             child: Image.memory(base64Decode(product!.imageUrl)),
           ),
-          title: Text(product!.title),
-          subtitle: Text('Total: Ksh${(product!.price * product!.price)}'),
-          trailing: Text('${product!.price} x'),
+          title: Text(product!.title,style: TextStyle(fontFamily: 'Gilroy', color: Colors.white),),
+          subtitle: Text('Total: Ksh${(product!.price * product!.price)}',style: TextStyle(fontFamily: 'Gilroy', color: Colors.white),),
+          trailing: Text('${product!.price} x',style: TextStyle(fontFamily: 'Gilroy',  color: Colors.white),),
         ),
       ),
     );
