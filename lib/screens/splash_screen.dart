@@ -42,7 +42,7 @@ class _SplashViewState extends State<SplashView> {
               width: 20,
             ),
             Text('Right from\nFarmers',
-                    style: theme.textTheme.bodyMedium!.copyWith(fontSize: 28)).animate().fade().slideX(
+                    style: theme.textTheme.bodyMedium!.copyWith(fontSize: 28,color: shrineBackgroundWhite)).animate().fade().slideX(
                   duration: 300.ms,
                   begin: -1,
                   curve: Curves.easeInSine,

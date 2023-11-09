@@ -35,11 +35,9 @@ class ColorAndSize extends StatelessWidget {
                     children: [
                       TextSpan(text: "Price\n"),
                       TextSpan(
-                        text: "Ksh" + product!.price.toString(),
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline5!
-                            .copyWith(color: kTextColor),
+                        text: product!.currency + ' ' + product!.price.toString(),
+                        style:
+                            Theme.of(context).textTheme.headline5!.copyWith(color: kTextLightColor),
                       ),
                     ],
                   ),
@@ -53,13 +51,10 @@ class ColorAndSize extends StatelessWidget {
                   style: TextStyle(color: shrineGreen300),
                   children: [
                     TextSpan(text: "Size\n"),
-                    TextSpan(text:
-                          "${product!.title.substring(product!.title.indexOf('/')
-                              + 1, product!.title.length)}",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline5!
-                          .copyWith(color: kTextColor),
+                    TextSpan(
+                      text: "${product!.stock}",
+                      style:
+                          Theme.of(context).textTheme.headline5!.copyWith(color: kTextLightColor),
                     )
                   ],
                 ),

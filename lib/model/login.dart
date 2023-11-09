@@ -1,8 +1,8 @@
-import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/constants/constants.dart';
+import 'package:grocery_app/model/home_provider.dart';
 import 'package:grocery_app/model/outlets.dart';
 import 'package:grocery_app/screens/home_dashboad_screen.dart';
 import 'package:grocery_app/screens/login_screen.dart';
@@ -10,6 +10,7 @@ import 'package:grocery_app/screens/select_outlet.dart';
 import 'package:grocery_app/sharedprefs/shared_prefs.dart';
 import 'package:grocery_app/util/apis.dart';
 import 'package:grocery_app/util/logs.dart';
+import 'package:provider/provider.dart';
 
 class LoginController with ChangeNotifier {
   bool isDataLoading = false;
@@ -86,7 +87,11 @@ class LoginController with ChangeNotifier {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => HomeDashBoardScreen(), settings: RouteSettings(arguments: args)));
+                  builder: (_) => Consumer<HomeProvider>(
+                      builder: (context,provider,child) {
+                      return HomeDashBoardScreen(provider: provider,);
+                    }
+                  ), settings: RouteSettings(arguments: args)));
         } else {
           Navigator.push(
               context,

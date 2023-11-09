@@ -141,6 +141,7 @@ class Products with ChangeNotifier {
               imageUrl: data['Products'][i]['Image'],
               title: data['Products'][i]['Product_name'],
               quantity: data['Products'][i]['Stock'],
+              currency: data['Products'][i]['Currency'],
               stock: data['Products'][i]['Quantity'],
               price: double.parse(data['Products'][i]['Price'].toString()),
               description: data['Products'][i]['Description']));
@@ -193,6 +194,7 @@ class Products with ChangeNotifier {
         price: product.price,
         imageUrl: product.imageUrl,
         quantity: product.quantity,
+        currency: product.currency,
         stock: product.stock,
         id: product.id,
         description: product.description);

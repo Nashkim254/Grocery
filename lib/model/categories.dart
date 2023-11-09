@@ -161,6 +161,7 @@ class Categories with ChangeNotifier {
               imageUrl: data[i]['Image'],
               title: data[i]['ProductName'],
               quantity: data[i]['Stock'],
+              currency: data[i]['Currency'],
               stock: data[i]['Quantity'],
               price: double.parse(data[i]['Price'].toString()),
               description: data[i]['Description']));

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:grocery_app/constants/constants.dart';
 import 'package:grocery_app/model/product.dart';
 import 'package:grocery_app/model/products.dart';
 import 'package:grocery_app/screens/product_details_screen.dart';
 import 'package:grocery_app/sharedprefs/shared_prefs.dart';
 import 'package:grocery_app/util/responsive.dart';
+import 'package:grocery_app/util/shopping_colors.dart';
+import 'package:grocery_app/widgets/customs/custom_searchfield.dart';
 import 'package:grocery_app/widgets/explore/product_widget.dart';
 import 'package:grocery_app/widgets/nav_drawer.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +25,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   TextEditingController editingController = TextEditingController();
   @override
   void initState() {
-        Provider.of<Products>(context, listen: false).getProducts(MySharedPref.getOutletId());
+    Provider.of<Products>(context, listen: false).getProducts(MySharedPref.getOutletId());
     super.initState();
   }
 
@@ -32,75 +36,60 @@ class _ExploreScreenState extends State<ExploreScreen> {
     } else {
       _products = widget.categoryProducts;
     }
-    return Row(
-      children: [
-        Responsive.isMobile(context) ? SizedBox() : NavDrawer(),
-        Expanded(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  cursorColor: Colors.grey.withOpacity(0.4),
-                  autofocus: false,
-                  style: TextStyle(color: Colors.black54),
-                  onChanged: (value) {
-                    // filterSearchResults(value);
-                  },
-                  controller: editingController,
-                  decoration: InputDecoration(
-                      hintText: "Search Store",
-                      filled: true,
-                      fillColor: Colors.grey.withOpacity(0.1),
-                      hoverColor: Colors.grey.withOpacity(0.1),
-                      focusColor: Colors.grey.withOpacity(0.1),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: Colors.black,
-                      ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(25.0)))),
-                ),
-              ),
-              Expanded(
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.all(16.0),
-                  itemBuilder: (_, index) {
-                    Product product = _products![index];
-                    return ChangeNotifierProvider.value(
-                      value: product,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-                            return ProductDetailsScreen(product: product);
-                          }));
-                        },
-                        child: ProductWidget(),
-                      ),
-                    );
-                  },
-                  itemCount: _products!.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: Responsive.getCrossAxisCount(context),
-                    // childAspectRatio: 200 / 220,
-                    crossAxisSpacing: 16.0,
-                    mainAxisSpacing: 16.0,
-                  ),
-                ),
-              ),
-            ],
+    return SafeArea(
+        child: Scaffold(
+      backgroundColor: scaffoldBackgroundColor,
+      body: Column(
+        children: [
+          SizedBox(height: 70),
+          Responsive.isMobile(context) ? SizedBox() : NavDrawer(),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24),
+            child: CustomFormField(
+              backgroundColor: primaryColorDark,
+              textSize: 14,
+              hint: 'Search category',
+              hintFontSize: 14,
+              hintColor: hintTextColor,
+              maxLines: 1,
+              borderRound: 60,
+              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              focusedBorderColor: Colors.transparent,
+              isSearchField: true,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.search,
+              prefixIcon: SvgPicture.asset(Constants.searchIcon, fit: BoxFit.none),
+            ),
           ),
-        ),
-      ],
-    );
+          Expanded(
+            child: GridView.builder(
+              shrinkWrap: true,
+              padding: EdgeInsets.all(16.0),
+              itemBuilder: (_, index) {
+                Product product = _products![index];
+                return ChangeNotifierProvider.value(
+                  value: product,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+                        return ProductDetailsScreen(product: product);
+                      }));
+                    },
+                    child: ProductWidget(),
+                  ),
+                );
+              },
+              itemCount: _products!.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: Responsive.getCrossAxisCount(context),
+                // childAspectRatio: 200 / 220,
+                crossAxisSpacing: 16.0,
+                mainAxisSpacing: 16.0,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ));
   }
 }

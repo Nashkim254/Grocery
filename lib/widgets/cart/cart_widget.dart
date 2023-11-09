@@ -74,6 +74,7 @@ class CartWidget extends StatelessWidget {
         Provider.of<Cart>(context, listen: false).removeItem(productId);
       },
       child: Card(
+        color: cardColor,
         margin: EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 4,
@@ -88,9 +89,9 @@ class CartWidget extends StatelessWidget {
             ),
             child: Image.memory(base64Decode(imageUrl)),
           ),
-          title: Text(title),
-          subtitle: Text('Total: Ksh ${(price * quantity)}'),
-          trailing: Text('$quantity x'),
+          title: Text(title,style: TextStyle(color: kTextLightColor),),
+          subtitle: Text('Total: Ksh ${(price * quantity)}',style: TextStyle(color: kTextLightColor),),
+          trailing: Text('$quantity x',style: TextStyle(color: kTextLightColor),),
         ),
       ),
     );

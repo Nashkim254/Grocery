@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/model/cart.dart';
 import 'package:grocery_app/model/categories.dart';
+import 'package:grocery_app/model/fav.dart';
+import 'package:grocery_app/model/home_provider.dart';
 import 'package:grocery_app/model/login.dart';
 import 'package:grocery_app/model/orders.dart';
 import 'package:grocery_app/model/products.dart';
@@ -35,6 +37,11 @@ class MyApp extends StatelessWidget {
         
          ChangeNotifierProvider.value(
           value: LoginController(),
+        ),  
+         ChangeNotifierProvider.value(
+          value: HomeProvider(),
+        ), ChangeNotifierProvider.value(
+          value: Fav(),
         ),
       ],
       child: MaterialApp(

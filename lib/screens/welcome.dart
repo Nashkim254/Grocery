@@ -42,7 +42,7 @@ class WelcomeView extends StatelessWidget {
                  SizedBox(height: 30),
                 Text(
                   'Get your groceries delivered to your home',
-                  style: theme.textTheme.displayMedium!.copyWith(fontSize: 30),
+                  style: theme.textTheme.displayMedium!.copyWith(fontSize: 30,color: shrineBackgroundWhite),
                   textAlign: TextAlign.center,
                 ).animate().fade().slideY(
                   duration: 300.ms,
@@ -52,7 +52,7 @@ class WelcomeView extends StatelessWidget {
                  SizedBox(height: 24),
                 Text(
                   'The best delivery app in town for delivering your daily fresh groceries',
-                  style: theme.textTheme.bodyMedium!.copyWith(fontSize: 20),
+                  style: theme.textTheme.bodyMedium!.copyWith(fontSize: 20,),
                   textAlign: TextAlign.center,
                 ).animate().fade().slideY(
                   duration: 300.ms,

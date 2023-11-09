@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grocery_app/constants/constants.dart';
+import 'package:grocery_app/model/home_provider.dart';
 import 'package:grocery_app/model/login.dart';
 import 'package:grocery_app/screens/home_dashboad_screen.dart';
 import 'package:grocery_app/sharedprefs/shared_prefs.dart';
@@ -15,7 +16,6 @@ class SelectOutlet extends StatelessWidget {
   const SelectOutlet({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final controller = Provider.of<LoginController>(context);
     final Map args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return SafeArea(
       child: Scaffold(
@@ -84,7 +84,11 @@ class SelectOutlet extends StatelessWidget {
             onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (_) => HomeDashBoardScreen(),
+                    builder: (_) => Consumer<HomeProvider>(
+                      builder: (context,provider,child) {
+                        return HomeDashBoardScreen(provider:provider);
+                      }
+                    ),
                     settings: RouteSettings(arguments: args))),
             borderColor: shrineGreen400,
             backgroundColor: primaryColor,
