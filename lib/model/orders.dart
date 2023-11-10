@@ -92,6 +92,7 @@ class PaymentMethod {
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
   bool isMakingSale = false;
+  bool isGettingSale = false;
   List<OrderItem> get orders {
     return [..._orders];
   }
@@ -166,6 +167,7 @@ class Orders with ChangeNotifier {
         notifyListeners();
       } else {
         ///error
+      isMakingSale = false;
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -188,6 +190,49 @@ class Orders with ChangeNotifier {
       print('Error  is $e');
     } finally {
       isMakingSale = false;
+      notifyListeners();
+    }
+  }
+
+  Future getSales(BuildContext context, String startDate, String endDate) async {
+    Map<String, dynamic> data = {};
+    data.addEntries({"startDate": startDate, "endDate": endDate}.entries);
+    try {
+      isGettingSale = true;
+      notifyListeners();
+      Response response = await Apis.dio.get('/sales/${MySharedPref.getUserId()}',
+          queryParameters: data,
+          options: Options(
+              headers: {'Content-Type': 'application/json', "token": MySharedPref.getToken()}));
+      if (response.statusCode == 200) {
+        isGettingSale = false;
+     
+        notifyListeners();
+      } else {
+        isGettingSale = false;
+        ///error
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Failed to get sales',
+            ),
+            duration: Duration(seconds: 2),
+            backgroundColor: redColor,
+            action: SnackBarAction(
+              label: 'Ok',
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      print('Error  is $e');
+    } finally {
+      isGettingSale = false;
       notifyListeners();
     }
   }
