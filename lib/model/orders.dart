@@ -91,10 +91,15 @@ class PaymentMethod {
 
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
+  List<Sale> _sales = [];
   bool isMakingSale = false;
   bool isGettingSale = false;
   List<OrderItem> get orders {
     return [..._orders];
+  }
+
+  List<Sale> get sales {
+    return [..._sales];
   }
 
   void addOrder(List<CartItem> cartProducts, double total, context) {
@@ -107,7 +112,10 @@ class Orders with ChangeNotifier {
         products: cartProducts,
       ),
     );
-    makeSale(cartProducts, total, context);
+  }
+
+  void addSales() {
+    _sales = sales;
     notifyListeners();
   }
 
@@ -167,7 +175,7 @@ class Orders with ChangeNotifier {
         notifyListeners();
       } else {
         ///error
-      isMakingSale = false;
+        isMakingSale = false;
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -200,16 +208,20 @@ class Orders with ChangeNotifier {
     try {
       isGettingSale = true;
       notifyListeners();
+      printWarning(data);
       Response response = await Apis.dio.get('/sales/${MySharedPref.getUserId()}',
           queryParameters: data,
           options: Options(
               headers: {'Content-Type': 'application/json', "token": MySharedPref.getToken()}));
       if (response.statusCode == 200) {
         isGettingSale = false;
-     
+        printSuccess("sales");
+        printSuccess(response.data);
+        // addSales();
         notifyListeners();
       } else {
         isGettingSale = false;
+
         ///error
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
 

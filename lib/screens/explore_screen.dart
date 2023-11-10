@@ -41,11 +41,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: scaffoldBackgroundColor,
+      drawer: !Responsive.isMobile(context) ? SizedBox() : NavDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 10),
-          Responsive.isMobile(context) ? SizedBox() : NavDrawer(),
+           IconButton(onPressed: (){}, icon: Icon(Icons.menu,color: shrineBackgroundWhite,)),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Text(

@@ -43,6 +43,7 @@ class LoginController with ChangeNotifier {
         ///data successfully
         MySharedPref.setToken(response.data['token']);
         MySharedPref.setName(response.data['name']);
+        MySharedPref.setPhone(response.data['phone']);
         MySharedPref.setUserId(response.data['id']);
         var argument = {"name": response.data['name']};
         print(response.data['token']);
@@ -60,7 +61,7 @@ class LoginController with ChangeNotifier {
 
   Future getOutlet(String userId, Map args, context) async {
     Apis.dio.options.headers["authorization"] = "Bearer ${MySharedPref.getToken()}";
-    Map<String, dynamic>? data;
+    
     debugPrint(Constants.baseUrl + '/outlet/$userId');
     try {
       isGettingOutlets = true;

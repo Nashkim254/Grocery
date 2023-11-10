@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/model/products.dart';
 import 'package:grocery_app/screens/product_details_screen.dart';
+import 'package:grocery_app/util/responsive.dart';
 import 'package:grocery_app/util/shopping_colors.dart';
 import 'package:grocery_app/widgets/fav/FavWidget.dart';
+import 'package:grocery_app/widgets/nav_drawer.dart';
 import 'package:provider/provider.dart';
 
 class FavScreen extends StatefulWidget {
@@ -19,10 +21,12 @@ class _FavScreenState extends State<FavScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: scaffoldBackgroundColor,
+        drawer: !Responsive.isMobile(context) ? SizedBox() : NavDrawer(),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(height: 10),
+            IconButton(onPressed: (){}, icon: Icon(Icons.menu,color: shrineBackgroundWhite,)),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(

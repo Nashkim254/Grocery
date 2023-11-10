@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/model/cart.dart';
 import 'package:grocery_app/model/orders.dart';
 import 'package:grocery_app/screens/product_details_screen.dart';
+import 'package:grocery_app/util/responsive.dart';
 import 'package:grocery_app/util/shopping_colors.dart';
 import 'package:grocery_app/widgets/cart/cart_widget.dart';
+import 'package:grocery_app/widgets/nav_drawer.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
@@ -17,9 +19,12 @@ class _CartScreenState extends State<CartScreen> {
     final cart = Provider.of<Cart>(context);
     return SafeArea(
       child: Scaffold(
-          backgroundColor: scaffoldBackgroundColor,
+        backgroundColor: scaffoldBackgroundColor,
+        drawer: !Responsive.isMobile(context) ? SizedBox() : NavDrawer(),
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+             IconButton(onPressed: (){}, icon: Icon(Icons.menu,color: shrineBackgroundWhite,)),
             Card(
               margin: EdgeInsets.all(16),
               color: cardColor,

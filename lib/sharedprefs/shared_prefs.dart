@@ -14,6 +14,7 @@ class MySharedPref {
   static const String _name = 'name';
   static const String _userId = 'userId';
   static const String _outletId = 'outletId';
+  static const String _email = 'email';
 
   /// init get storage services
   static Future<void> init() async {
@@ -33,7 +34,10 @@ class MySharedPref {
       _sharedPreferences.setString(_token, token);  
             /// set name
   static Future<void> setName(String name) =>
-      _sharedPreferences.setString(_userId, name);
+      _sharedPreferences.setString(_name, name);  
+      
+      static Future<void> setPhone(String email) =>
+      _sharedPreferences.setString(_email, email);
 
         static Future<void> setUserId(String id) =>
       _sharedPreferences.setString(_userId, id);
@@ -48,6 +52,9 @@ class MySharedPref {
          /// get token
   static String getToken() =>
       _sharedPreferences.getString(_token) ?? "";
+      
+        static String getPhone() =>
+      _sharedPreferences.getString(_email) ?? "";
       
         static String getOutletId() =>
       _sharedPreferences.getString(_outletId) ?? "";
