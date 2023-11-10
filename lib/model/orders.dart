@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:grocery_app/sharedprefs/shared_prefs.dart';
 import 'package:grocery_app/util/apis.dart';
+import 'package:grocery_app/util/logs.dart';
+import 'package:grocery_app/util/shopping_colors.dart';
 
 import './cart.dart';
 
@@ -21,30 +24,30 @@ class OrderItem {
 
 class Sale {
   final String id;
-  final String user_id;
-  final String customer_id;
+  final int user_id;
+  final int customer_id;
   final String currency;
-  final double amount;
-  final List<SaleProduct> product;
-  final List<PaymentMethod> paymentMethods;
+  final double total_amount;
+  final List<SaleProduct> products;
+  final List<PaymentMethod> paymentmethods;
 
   Sale(
       {required this.id,
       required this.user_id,
       required this.customer_id,
       required this.currency,
-      required this.amount,
-      required this.product,
-      required this.paymentMethods});
+      required this.total_amount,
+      required this.products,
+      required this.paymentmethods});
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'user_id': user_id,
       'customer_id': customer_id,
       'currency': currency,
-      'amount': amount,
-      'product': product.map((p) => p.toJson()).toList(),
-      'paymentMethods': paymentMethods.map((p) => p.toJson()).toList(),
+      'total_amount': total_amount,
+      'products': products.map((p) => p.toJson()).toList(),
+      'paymentmethods': paymentmethods.map((p) => p.toJson()).toList(),
     };
   }
 }
@@ -93,7 +96,7 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
-  void addOrder(List<CartItem> cartProducts, double total) {
+  void addOrder(List<CartItem> cartProducts, double total, context) {
     _orders.insert(
       0,
       OrderItem(
@@ -103,13 +106,14 @@ class Orders with ChangeNotifier {
         products: cartProducts,
       ),
     );
+    makeSale(cartProducts, total, context);
     notifyListeners();
   }
 
-  Future makeSale(List<CartItem> cartItems, double total) async {
+  Future makeSale(List<CartItem> cartItems, double total, BuildContext context) async {
     Sale sale;
     String saleId = "1";
-    List<PaymentMethod> paymentMethods = [];
+    List<PaymentMethod> paymentmethods = [];
     List<SaleProduct> products = [];
     for (CartItem cartItem in cartItems) {
       products.add(
@@ -121,29 +125,64 @@ class Orders with ChangeNotifier {
         ),
       );
     }
-    paymentMethods.add(PaymentMethod(saleid: saleId, method_type: "Cash", amount: total));
+    paymentmethods.add(PaymentMethod(saleid: saleId, method_type: "Cash", amount: total));
     sale = Sale(
         id: saleId,
-        user_id: MySharedPref.getUserId(),
-        customer_id: "1",
+        user_id: int.parse(MySharedPref.getUserId()),
+        customer_id: 1,
         currency: "USD",
-        amount: total,
-        product: products,
-        paymentMethods: paymentMethods);
+        total_amount: total,
+        products: products,
+        paymentmethods: paymentmethods);
 
     try {
       isMakingSale = true;
       notifyListeners();
       var data = sale.toJson();
-      Response response = await Apis.dio.post('sales',
-      data: data,
+      printSuccess("data: " + data.toString());
+      Response response = await Apis.dio.post('/sales',
+          data: data,
           options: Options(
               headers: {'Content-Type': 'application/json', "token": MySharedPref.getToken()}));
       if (response.statusCode == 200) {
         isMakingSale = false;
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Sale completed successfully',
+            ),
+            duration: Duration(seconds: 2),
+            backgroundColor: primaryColor,
+            action: SnackBarAction(
+              label: 'Ok',
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        );
         notifyListeners();
       } else {
         ///error
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Failed to complete sale',
+            ),
+            duration: Duration(seconds: 2),
+            backgroundColor: redColor,
+            action: SnackBarAction(
+              label: 'Ok',
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        );
       }
     } catch (e) {
       print('Error  is $e');

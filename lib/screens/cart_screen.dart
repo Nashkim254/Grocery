@@ -44,6 +44,7 @@ class _CartScreenState extends State<CartScreen> {
                         Provider.of<Orders>(context, listen: false).addOrder(
                           cart.items.values.toList(),
                           cart.totalAmount,
+                          context
                         );
                         cart.clear();
                       },
