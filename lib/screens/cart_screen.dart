@@ -14,17 +14,20 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+      final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: scaffoldBackgroundColor,
         drawer: !Responsive.isMobile(context) ? SizedBox() : NavDrawer(),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-             IconButton(onPressed: (){}, icon: Icon(Icons.menu,color: shrineBackgroundWhite,)),
+             IconButton(onPressed: (){ _scaffoldKey.currentState?.openDrawer();}, icon: Icon(Icons.menu,color: shrineBackgroundWhite,)),
             Card(
               margin: EdgeInsets.all(16),
               color: cardColor,

@@ -31,6 +31,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
+        final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
     if (widget.categoryProducts == null || widget.categoryProducts!.isEmpty) {
       _products = Provider.of<Products>(context).items;
     } else {
@@ -40,13 +42,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
     return SafeArea(
         child: Scaffold(
+          key: _scaffoldKey,
       backgroundColor: scaffoldBackgroundColor,
       drawer: !Responsive.isMobile(context) ? SizedBox() : NavDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 10),
-           IconButton(onPressed: (){}, icon: Icon(Icons.menu,color: shrineBackgroundWhite,)),
+           IconButton(onPressed: (){ _scaffoldKey.currentState?.openDrawer();}, icon: Icon(Icons.menu,color: shrineBackgroundWhite,)),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Text(

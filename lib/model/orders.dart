@@ -91,16 +91,14 @@ class PaymentMethod {
 
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
-  List<Sale> _sales = [];
+  List<Sale> sales = [];
   bool isMakingSale = false;
   bool isGettingSale = false;
   List<OrderItem> get orders {
     return [..._orders];
   }
 
-  List<Sale> get sales {
-    return [..._sales];
-  }
+  
 
   void addOrder(List<CartItem> cartProducts, double total, context) {
     _orders.insert(
@@ -114,10 +112,10 @@ class Orders with ChangeNotifier {
     );
   }
 
-  void addSales() {
-    _sales = sales;
-    notifyListeners();
-  }
+  // void addSales(sales) {
+  //   _sales = sales;
+  //   notifyListeners();
+  // }
 
   Future makeSale(List<CartItem> cartItems, double total, BuildContext context) async {
     Sale sale;
@@ -202,7 +200,7 @@ class Orders with ChangeNotifier {
     }
   }
 
-  Future getSales(BuildContext context, String startDate, String endDate) async {
+  Future getSales(BuildContext context, DateTime startDate, DateTime endDate) async {
     Map<String, dynamic> data = {};
     data.addEntries({"startDate": startDate, "endDate": endDate}.entries);
     try {
@@ -217,7 +215,17 @@ class Orders with ChangeNotifier {
         isGettingSale = false;
         printSuccess("sales");
         printSuccess(response.data);
-        // addSales();
+        var data = response.data['sales'];
+        for (var i = 0; i < data.length; i++) {
+          sales.add(Sale(
+              id: data[i]['id'].toString(),
+              user_id: int.parse(data[i]['user_id']),
+              customer_id: int.parse(data[i]['customer_id']),
+              currency: "USD",
+              total_amount: double.parse(data[i]['total_amount'].toString()),
+              products: [],
+              paymentmethods: []));
+        }
         notifyListeners();
       } else {
         isGettingSale = false;

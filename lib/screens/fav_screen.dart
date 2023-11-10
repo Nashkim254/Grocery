@@ -17,16 +17,18 @@ class _FavScreenState extends State<FavScreen> {
   Widget build(BuildContext context) {
     final products = Provider.of<Products>(context).favoriteItems;
     final theme = Theme.of(context);
+    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
     return SafeArea(
       child: Scaffold(
+          key: _scaffoldKey,
         backgroundColor: scaffoldBackgroundColor,
         drawer: !Responsive.isMobile(context) ? SizedBox() : NavDrawer(),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(height: 10),
-            IconButton(onPressed: (){}, icon: Icon(Icons.menu,color: shrineBackgroundWhite,)),
+            IconButton(onPressed: (){ _scaffoldKey.currentState?.openDrawer();}, icon: Icon(Icons.menu,color: shrineBackgroundWhite,)),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
