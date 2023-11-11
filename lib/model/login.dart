@@ -1,11 +1,9 @@
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/constants/constants.dart';
 import 'package:grocery_app/model/home_provider.dart';
 import 'package:grocery_app/model/outlets.dart';
 import 'package:grocery_app/screens/home_dashboad_screen.dart';
-import 'package:grocery_app/screens/login_screen.dart';
 import 'package:grocery_app/screens/select_outlet.dart';
 import 'package:grocery_app/sharedprefs/shared_prefs.dart';
 import 'package:grocery_app/util/apis.dart';
@@ -61,7 +59,7 @@ class LoginController with ChangeNotifier {
 
   Future getOutlet(String userId, Map args, context) async {
     Apis.dio.options.headers["authorization"] = "Bearer ${MySharedPref.getToken()}";
-    
+
     debugPrint(Constants.baseUrl + '/outlet/$userId');
     try {
       isGettingOutlets = true;
@@ -88,11 +86,12 @@ class LoginController with ChangeNotifier {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => Consumer<HomeProvider>(
-                      builder: (context,provider,child) {
-                      return HomeDashBoardScreen(provider: provider,);
-                    }
-                  ), settings: RouteSettings(arguments: args)));
+                  builder: (_) => Consumer<HomeProvider>(builder: (context, provider, child) {
+                        return HomeDashBoardScreen(
+                          provider: provider,
+                        );
+                      }),
+                  settings: RouteSettings(arguments: args)));
         } else {
           Navigator.push(
               context,
@@ -124,7 +123,7 @@ class LoginController with ChangeNotifier {
       Response response = await Apis.dio.post('/register', data: body);
       if (response.statusCode == 200) {
         isRegistering = false;
-        Navigator.push(context, MaterialPageRoute(builder: (_) => LoginUI()));
+        Navigator.pop(context);
       } else {
         isRegistering = false;
 

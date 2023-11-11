@@ -68,7 +68,6 @@ class _ButtonLoginAnimationState extends State<ButtonLoginAnimation> with Ticker
 
   @override
   Widget build(BuildContext context) {
-    final controller = Provider.of<LoginController>(context);
     return Consumer<LoginController>(builder: (context, provider, child) {
       return InkWell(
         onTap: provider.isDataLoading == true

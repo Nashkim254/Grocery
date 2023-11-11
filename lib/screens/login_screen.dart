@@ -1,6 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:grocery_app/model/login.dart';
+import 'package:grocery_app/screens/register.dart';
 import 'package:grocery_app/util/logs.dart';
 import 'package:grocery_app/util/responsive.dart';
 import 'package:grocery_app/util/shopping_colors.dart';
@@ -17,7 +19,7 @@ class _LoginUIState extends State<LoginUI> {
   TextEditingController password = TextEditingController();
 
   Widget _loginPanel(double w, double h) {
-     final controller = Provider.of<LoginController>(context);
+    final controller = Provider.of<LoginController>(context);
     return ListView(
       //  crossAxisAlignment: CrossAxisAlignment.start,
       //  mainAxisAlignment: MainAxisAlignment.center,
@@ -28,15 +30,15 @@ class _LoginUIState extends State<LoginUI> {
             //   key: formkey,
             child: TextFormField(
               controller: phone,
-              cursorColor: Colors.black,
-              style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
+              cursorColor: shrineBackgroundWhite,
+              style: TextStyle(color: shrineBackgroundWhite, fontSize: 18, fontWeight: FontWeight.w400),
               keyboardType: TextInputType.text,
               obscureText: false,
               maxLines: 1,
               decoration: InputDecoration(
                 hintText: "Phone",
                 labelStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
-                hintStyle: TextStyle(color: Colors.grey[450], fontWeight: FontWeight.w600),
+                hintStyle: TextStyle(color: shrineBackgroundWhite, fontWeight: FontWeight.w600),
               ),
               onChanged: ((value) => printWarning(value)),
             ),
@@ -48,15 +50,15 @@ class _LoginUIState extends State<LoginUI> {
             //   key: formkey,
             child: TextFormField(
               controller: password,
-              cursorColor: Colors.black,
-              style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w400),
+              cursorColor: shrineBackgroundWhite,
+              style: TextStyle(color: shrineBackgroundWhite, fontSize: 18, fontWeight: FontWeight.w400),
               keyboardType: TextInputType.text,
               obscureText: true,
               maxLines: 1,
               decoration: InputDecoration(
                 hintText: "Password",
                 labelStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
-                hintStyle: TextStyle(color: Colors.grey[450], fontWeight: FontWeight.w600),
+                hintStyle: TextStyle(color: shrineBackgroundWhite, fontWeight: FontWeight.w600),
               ),
               onChanged: ((value) => printWarning(value)),
             ),
@@ -76,17 +78,19 @@ class _LoginUIState extends State<LoginUI> {
                 height: 50,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: shrineGreen400,
+                  color: primaryColor,
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Center(
-                  child: provider.isDataLoading == true ? 
-                  CircularProgressIndicator(color: Colors.white,)
-                  : Text(
-                    "Login",
-                    style:
-                        TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
-                  ),
+                  child: provider.isDataLoading == true
+                      ? CircularProgressIndicator(
+                          color: Colors.white,
+                        )
+                      : Text(
+                          "Login",
+                          style: TextStyle(
+                              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+                        ),
                 ),
               ),
             );
@@ -94,6 +98,33 @@ class _LoginUIState extends State<LoginUI> {
         ),
         // _facebookButton('f', shrineGreen400, 'Log in with Facebook',
         //     shrineGreen300),
+        const SizedBox(
+          height: 12,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Don\'nt have an account? ',
+                  style: TextStyle(fontSize: 16, color: shrineBackgroundWhite),
+                ),
+                TextSpan(
+                  text: "Register",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: primaryColor,
+                    decoration: TextDecoration.underline,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () =>
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => Register())),
+                ),
+              ],
+            ),
+          ),
+        )
       ],
     );
   }
@@ -104,6 +135,7 @@ class _LoginUIState extends State<LoginUI> {
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: true,
+      backgroundColor: scaffoldBackgroundColor,
       body: Stack(
         children: <Widget>[
           Container(
@@ -114,7 +146,7 @@ class _LoginUIState extends State<LoginUI> {
             child: ClipPath(
               clipper: WaveClipper(),
               child: ColoredBox(
-                color: shrineGreen400,
+                color: primaryColor,
               ),
             ),
           ),
@@ -155,41 +187,4 @@ class _LoginUIState extends State<LoginUI> {
       ),
     );
   }
-}
-
-Widget _facebookButton(String logoText, Color logoBgColor, String title, Color titleBgColor) {
-  return Container(
-    height: 50,
-    margin: EdgeInsets.all(25),
-    child: Row(
-      children: <Widget>[
-        Expanded(
-          flex: 1,
-          child: Container(
-            decoration: BoxDecoration(
-              color: logoBgColor,
-              borderRadius:
-                  BorderRadius.only(bottomLeft: Radius.circular(15), topLeft: Radius.circular(15)),
-            ),
-            alignment: Alignment.center,
-            child: Text(logoText,
-                style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.w400)),
-          ),
-        ),
-        Expanded(
-          flex: 5,
-          child: Container(
-            decoration: BoxDecoration(
-              color: titleBgColor,
-              borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(15), topRight: Radius.circular(15)),
-            ),
-            alignment: Alignment.center,
-            child: Text(title,
-                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w400)),
-          ),
-        ),
-      ],
-    ),
-  );
 }
