@@ -84,8 +84,8 @@ class FavWidget extends StatelessWidget {
             child: Image.memory(base64Decode(product!.imageUrl)),
           ),
           title: Text(product!.title,style: TextStyle(fontFamily: 'Gilroy', color: Colors.white),),
-          subtitle: Text('Total: Ksh${(product!.price * product!.price)}',style: TextStyle(fontFamily: 'Gilroy', color: Colors.white),),
-          trailing: Text('${product!.price} x',style: TextStyle(fontFamily: 'Gilroy',  color: Colors.white),),
+          subtitle: Text('Total: ${product!.currency} ${(product!.quantity * product!.price)}',style: TextStyle(fontFamily: 'Gilroy', color: Colors.white),),
+          trailing: Text('${product!.price} x ${product!.quantity}',style: TextStyle(fontFamily: 'Gilroy',  color: Colors.white),),
         ),
       ),
     );

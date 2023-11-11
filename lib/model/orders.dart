@@ -98,8 +98,6 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
-  
-
   void addOrder(List<CartItem> cartProducts, double total, context) {
     _orders.insert(
       0,
@@ -110,6 +108,7 @@ class Orders with ChangeNotifier {
         products: cartProducts,
       ),
     );
+    makeSale(cartProducts, total, context);
   }
 
   // void addSales(sales) {
@@ -119,7 +118,8 @@ class Orders with ChangeNotifier {
 
   Future makeSale(List<CartItem> cartItems, double total, BuildContext context) async {
     Sale sale;
-    String saleId = "1";
+    
+    String saleId = DateTime.now().hashCode.toString();
     List<PaymentMethod> paymentmethods = [];
     List<SaleProduct> products = [];
     for (CartItem cartItem in cartItems) {
