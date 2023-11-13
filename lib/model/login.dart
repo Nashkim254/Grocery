@@ -29,8 +29,6 @@ class LoginController with ChangeNotifier {
       isDataLoading = true;
       notifyListeners();
       data = {"phone": phone, "password": password};
-      printInfo("jdjdsjdsjkd=======§");
-      printInfo(data);
       Response response = await Apis.dio.post('/login', data: data);
       debugPrint(response.statusCode.toString());
       debugPrint(response.data.toString());
@@ -44,7 +42,6 @@ class LoginController with ChangeNotifier {
         MySharedPref.setPhone(response.data['phone']);
         MySharedPref.setUserId(response.data['id']);
         var argument = {"name": response.data['name']};
-        print(response.data['token']);
         await getOutlet(response.data['id'], argument, context);
       } else {
         ///error
@@ -113,26 +110,33 @@ class LoginController with ChangeNotifier {
       String phone, String password, String fname, String lname, String email, context) async {
     try {
       isRegistering = true;
+      notifyListeners();
       Map body = {
+        "id": DateTime.now().hashCode.toString(),
         "first_name": fname,
         "last_name": lname,
         "password": password,
         "email": email,
         "phone": phone
       };
+      printSuccess(body);
       Response response = await Apis.dio.post('/register', data: body);
       if (response.statusCode == 200) {
         isRegistering = false;
+        notifyListeners();
         Navigator.pop(context);
       } else {
         isRegistering = false;
-
+        notifyListeners();
         ///error
       }
     } catch (e) {
       print('Error while getting data is $e');
+      isRegistering = false;
+        notifyListeners();
     } finally {
       isDataLoading = false;
+      notifyListeners();
     }
   }
 }

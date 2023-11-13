@@ -105,7 +105,7 @@ class Register extends StatelessWidget {
                     height: 10,
                   ),
                   TextFormField(
-                    controller: emailCont,
+                    controller: phoneCont,
                     validator: (value) => emptyValidator(value!),
                     style: TextStyle(fontSize: 16, color: kTextLightColor),
                     keyboardType: TextInputType.emailAddress,
@@ -124,7 +124,7 @@ class Register extends StatelessWidget {
                     height: 10,
                   ),
                   TextFormField(
-                    controller: phoneCont,
+                    controller: emailCont,
                     validator: (value) => emailValidator(value!),
                     style: TextStyle(fontSize: 16, color: kTextLightColor),
                     keyboardType: TextInputType.emailAddress,

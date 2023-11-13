@@ -12,7 +12,7 @@ class CounterWithFavBtn extends StatelessWidget {
   const CounterWithFavBtn({Key? key, required this.product}) : super(key: key);
 
   void addProductToFav(BuildContext context, Product product, Fav fav) {
-    fav.addItem(product.id, product.price, product.title, product.imageUrl);
+    fav.addItem(product.id, product.price, product.title, product.imageUrl,context);
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

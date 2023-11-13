@@ -94,7 +94,7 @@ class _OrdersViewState extends State<OrdersView> {
                                       style: TextStyle(color: kTextLightColor),
                                     ),
                                     subtitle: Text(
-                                      "Total: Ksh ${provider.sales[index].currency} ${provider.sales[index].total_amount}",
+                                      "Total: ${provider.sales[index].currency} ${provider.sales[index].total_amount}",
                                       style: TextStyle(color: kTextLightColor),
                                     ),
                                     trailing: Text(

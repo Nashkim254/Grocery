@@ -43,7 +43,7 @@ class _CartScreenState extends State<CartScreen> {
                     Spacer(),
                     Chip(
                       label: Text(
-                        'Ksh ${cart.totalAmount.toStringAsFixed(2)}',
+                        'USD ${cart.totalAmount.toStringAsFixed(2)}',
                       ),
                       backgroundColor: shrineGreen400,
                     ),

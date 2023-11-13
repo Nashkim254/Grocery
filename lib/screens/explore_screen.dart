@@ -53,7 +53,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
-              "Favourites",
+              "Products",
               style: theme.textTheme.headline5
                   ?.copyWith(fontWeight: FontWeight.normal, color: kTextLightColor),
             ),

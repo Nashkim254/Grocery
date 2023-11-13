@@ -1,4 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:grocery_app/sharedprefs/shared_prefs.dart';
+import 'package:grocery_app/util/apis.dart';
+import 'package:grocery_app/util/logs.dart';
+import 'package:grocery_app/util/shopping_colors.dart';
 
 class FavItem {
   final String id;
@@ -17,6 +23,7 @@ class FavItem {
 }
 
 class Fav with ChangeNotifier {
+  bool isAddingFavorite = false;
   Map<String, FavItem> _items = {};
 
   Map<String, FavItem> get items {
@@ -36,23 +43,20 @@ class Fav with ChangeNotifier {
   }
 
   void addItem(
-    String productId,
-    double price,
-    String title,
-    String imageUrl,
-  ) {
+      String productId, double price, String title, String imageUrl, BuildContext context) {
     if (_items.containsKey(productId)) {
       // change quantity...
+      late FavItem item;
       _items.update(
-        productId,
-        (existingFavItem) => FavItem(
-          id: existingFavItem.id,
-          title: existingFavItem.title,
-          price: existingFavItem.price,
-          quantity: existingFavItem.quantity + 1,
-          imageUrl: imageUrl,
-        ),
-      );
+          productId,
+          (existingFavItem) => item = FavItem(
+                id: existingFavItem.id,
+                title: existingFavItem.title,
+                price: existingFavItem.price,
+                quantity: existingFavItem.quantity + 1,
+                imageUrl: imageUrl,
+              ));
+      addFav(context, productId, item.quantity);
     } else {
       _items.putIfAbsent(
         productId,
@@ -64,7 +68,9 @@ class Fav with ChangeNotifier {
           imageUrl: imageUrl,
         ),
       );
+      addFav(context, productId, 1);
     }
+
     notifyListeners();
   }
 
@@ -96,5 +102,74 @@ class Fav with ChangeNotifier {
   void clear() {
     _items = {};
     notifyListeners();
+  }
+
+  Future addFav(BuildContext context, String productId, int quantity) async {
+    printSuccess("Add to favorites");
+    printError(productId);
+    printError(quantity);
+    try {
+      isAddingFavorite = true;
+      notifyListeners();
+      Map<String, dynamic> data = {};
+      String id = DateTime.now().hashCode.toString();
+      data.addEntries({
+        "id": id,
+        "product_id": productId,
+        "quantity": quantity,
+        "userid": MySharedPref.getUserId()
+      }.entries);
+      printSuccess("data: " + data.toString());
+      Response response = await Apis.dio.post('/favorites',
+          data: data,
+          options: Options(
+              headers: {'Content-Type': 'application/json', "token": MySharedPref.getToken()}));
+      if (response.statusCode == 200) {
+        isAddingFavorite = false;
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Added to favorites',
+            ),
+            duration: Duration(seconds: 2),
+            backgroundColor: primaryColor,
+            action: SnackBarAction(
+              label: 'Ok',
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        );
+        notifyListeners();
+      } else {
+        ///error
+        isAddingFavorite = false;
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Failed to add to favorites',
+            ),
+            duration: Duration(seconds: 2),
+            backgroundColor: redColor,
+            action: SnackBarAction(
+              label: 'Ok',
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      print('Error  is $e');
+    } finally {
+      isAddingFavorite = false;
+      notifyListeners();
+    }
   }
 }
