@@ -90,7 +90,7 @@ class CartWidget extends StatelessWidget {
             child: Image.memory(base64Decode(imageUrl)),
           ),
           title: Text(title,style: TextStyle(color: kTextLightColor),),
-          subtitle: Text('Total: Ksh ${(price * quantity)}',style: TextStyle(color: kTextLightColor),),
+          subtitle: Text('Total: USD ${(price * quantity)}',style: TextStyle(color: kTextLightColor),),
           trailing: Text('$quantity x',style: TextStyle(color: kTextLightColor),),
         ),
       ),
